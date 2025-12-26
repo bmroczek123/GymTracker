@@ -26,8 +26,6 @@ Aplikacja będzie dostępna pod adresem:
 **http://localhost:3000**
 
 
-## 👤 Autor
-
+##  Autor
 **Bartłomiej Mroczek** nr indeksu 169589
 
-```
