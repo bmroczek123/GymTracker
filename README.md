@@ -6,7 +6,7 @@ Do poprawnego działania aplikacji wymagany jest zainstalowany **Docker Desktop*
 
 ### 1. Pobierz repozytorium
 ```bash
-git clone [https://github.com/bmroczek123/GymTracker.git](https://github.com/bmroczek123/GymTracker.git)
+git clone https://github.com/bmroczek123/GymTracker.git
 cd GymTracker
 
 ```
