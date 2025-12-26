@@ -1,29 +1,33 @@
-========================================================================
- GYMTRACKER 
-========================================================================
+# GymTracker 
 
-OPIS PROJEKTU:
-Aplikacja webowa służąca do rejestrowania treningów oraz wizualizacji postępów siłowych.
+Aplikacja webowa, służąca do śledzenia postępów siłowych. Umożliwia zapis, usuwanie historii ćwiczeń oraz analizę wizualną wyników na wykresie.
 
-------------------------------------------------------------------------
-🚀  INSTRUKCJA URUCHOMIENIA
-------------------------------------------------------------------------
-Do działania aplikacji wymagany jest zainstalowany i uruchomiony Docker Desktop.
 
-1. Pobierz repozytorium:
-   git clone https://github.com/bmroczek123/GymTracker.git
-   cd GymTracker
 
-2. Uruchom kontenery:
-   docker-compose up --build
 
-3. Dostęp do aplikacji:
-   Gdy proces budowania zostanie ukończony, aplikacja będzie dostępna 
-   pod adresem: http://localhost:3000
+## Jak uruchomić projekt?
 
-------------------------------------------------------------------------
-👤  AUTOR
-------------------------------------------------------------------------
-Bartłomiej Mroczek
-Nr indeksu: 169589
-========================================================================
+Do uruchomienia projektu potrzebny jest zainstalowany i uruchomiony Docker Desktop.
+
+### 1. Sklonuj repozytorium
+```bash
+git clone https://github.com/bmroczek123/GymTracker.git
+cd GymTracker
+
+```
+
+### 2. Uruchom kontenery
+
+```bash
+docker-compose up --build
+
+```
+
+### 3. Dostęp do aplikacji
+
+👉 **http://localhost:3000**
+
+*Baza danych PostgreSQL działa w tle na porcie 5432.*
+
+**Autor:** Bartłomiej Mroczek, nr indeksu 169589
+
