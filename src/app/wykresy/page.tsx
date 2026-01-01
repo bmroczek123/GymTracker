@@ -1,14 +1,15 @@
-import { prisma } from "@/lib/db"
-import WorkoutChart from "@/components/WorkoutChart"
+import WorkoutChart from "@/components/WorkoutChart";
+import { getAllWorkouts } from "@/services/workouts"; 
 
 export const dynamic = "force-dynamic";
 
 export default async function WykresyPage() {
-  const workouts = await prisma.workout.findMany()
+  const workouts = await getAllWorkouts();
+
   return (
     <div className="content-wrapper">
-      <h2 className="navbar-title">Postępy</h2>
+      
       <WorkoutChart workouts={workouts} />
     </div>
-  )
+  );
 }

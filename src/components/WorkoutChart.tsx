@@ -1,49 +1,87 @@
 "use client"
+
 import { useState } from "react"
 import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, 
-  ResponsiveContainer, Tooltip, Legend 
+  Line, XAxis, YAxis, CartesianGrid, 
+  ResponsiveContainer, Tooltip, Legend, 
+  ComposedChart,
+  Bar,
+  LineChart
 } from "recharts"
+import { getUniqueExercises, getChartDataForExercise, Workout, getMaxWeightForExercise } from "@/lib/stats"
 
-export default function WorkoutChart({ workouts }: { workouts: any[] }) {
-  const exercises = Array.from(new Set(workouts.map(w => w.exercise)))
-  const [selected, setSelected] = useState(exercises[0] || "")
+export default function WorkoutChart({ workouts }: { workouts: Workout[] }) {
+  const exercises =  getUniqueExercises(workouts)
+  
+  const [selected, setSelected] = useState(exercises[0] || "");
 
-  const data = workouts
-    .filter(w => w.exercise === selected)
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    .map((w, index) => ({
-      ...w,
-      displayDate: new Date(w.date).toLocaleDateString("pl-PL"),
-      chartId: index 
-    }))
+const data = getChartDataForExercise(workouts, selected);
+  const maxData = getMaxWeightForExercise(workouts, selected);
 
   return (
     <div className="card">
       <div className="card-header">
-        <select value={selected} onChange={(e) => setSelected(e.target.value)} className="select">
+        <h3 className="card-title mb-4">Postępy treningowe</h3>
+        <select 
+          value={selected} 
+          onChange={(e) => setSelected(e.target.value)} 
+          className="select"
+          style={{ 
+            padding: '8px', 
+            borderRadius: '6px', 
+            border: '1px solid #e4e4e7', 
+            width: '100%', 
+            maxWidth: '300px' 
+          }}
+        >
           {exercises.map(ex => <option key={ex} value={ex}>{ex}</option>)}
         </select>
       </div>
-      <div className="card-content" style={{ paddingTop: '20px' }}>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e4e4e7" />
+
+      <div style={{ width: '100%', height: 400 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
             
             <XAxis 
               dataKey="chartId" 
               tickFormatter={(val) => data[val]?.displayDate}
-              tick={{ fontSize: 12 }}
+              tick={{ 
+                fontSize: 11, 
+                fill: '#64748b' 
+              }}
             />
 
-            <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
-            <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
+            <YAxis 
+              yAxisId="left" 
+              orientation="left" 
+              stroke="#18181b"
+              tick={{ fontSize: 12 }}
+              label={{ value: 'Ciężar (kg)', angle: -90, position: 'insideLeft', offset: 10 }}
+            />
+
+            <YAxis 
+              yAxisId="right" 
+              orientation="right" 
+              stroke="#3b82f6"
+              tick={{ fontSize: 12 }}
+              label={{ value: 'Powtórzenia', angle: 90, position: 'insideRight', offset: 10 }}
+            />
 
             <Tooltip 
               labelFormatter={(val) => `Data: ${data[val]?.displayDate}`}
-              contentStyle={{ borderRadius: '8px', border: '1px solid #e4e4e7' }}
+              contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
             />
-            <Legend verticalAlign="top" height={36}/>
+            <Legend verticalAlign="top" height={40}/>
+
+            <Bar 
+              yAxisId="right" 
+              dataKey="reps" 
+              name="Liczba powtórzeń" 
+              fill="#dae53e" 
+              radius={[4, 4, 0, 0]} 
+              barSize={30}
+            />
             
             <Line 
               yAxisId="left"
@@ -51,24 +89,42 @@ export default function WorkoutChart({ workouts }: { workouts: any[] }) {
               type="monotone" 
               dataKey="weight" 
               stroke="#18181b" 
-              strokeWidth={3} 
-              dot={{ r: 6, fill: "#18181b" }}
-              activeDot={{ r: 9 }}
+              strokeWidth={4} 
+              dot={{ r: 6, fill: "#18181b", strokeWidth: 2, stroke: "#fff" }}
+              activeDot={{ r: 8, strokeWidth: 0 }}
             />
-
-            <Line 
-              yAxisId="right"
-              name="Powtórzenia"
-              type="monotone" 
-              dataKey="reps" 
-              stroke="#2563eb" 
-              strokeWidth={2} 
-              strokeDasharray="5 5"
-              dot={{ r: 4 }}
-            />
-          </LineChart>
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
+
+      <div className="card">
+        <div className="card-header">
+          <h3 className="card-title">Progresja ciężaru maksymalnego</h3>
+        </div>
+        <div className="card-content" style={{ paddingTop: '20px' }}>
+          <div style={{ width: '100%', height: 350 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={maxData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="date" tick={{ fontSize: 11 }} />
+                <YAxis unit="kg" tick={{ fontSize: 12 }} />
+                <Tooltip 
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                />
+                <Legend verticalAlign="top" height={40}/>
+                <Line 
+                  type="stepAfter"
+                  dataKey="maxWeight" 
+                  name="Najcięższa seria dnia (kg)" 
+                  stroke="#ef4444" 
+                  strokeWidth={4} 
+                  dot={{ r: 6, fill: "#ef4444" }} 
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

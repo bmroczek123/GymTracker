@@ -2,15 +2,16 @@
 import { usePathname } from "next/navigation"
 import { User } from "lucide-react"
 
+const titles: { [key: string]: string } = {
+  "/": "Dziennik treningowy",
+  "/dziennik": "Dziennik treningowy",
+  "/wykresy": "Statystyki i postępy",
+  "/o-aplikacji": "Informacje",
+}
+
 export default function Navbar() {
   const pathname = usePathname()
 
-  const titles: { [key: string]: string } = {
-    "/": "Dziennik treningowy",
-    "/dziennik": "Dziennik treningowy",
-    "/wykresy": "Statystyki i postępy",
-    "/o-aplikacji": "Informacje",
-  }
 
   const currentTitle = titles[pathname] || "GymTracker"
 

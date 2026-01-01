@@ -3,14 +3,15 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Dumbbell, LineChart, Info } from "lucide-react"
 
+const menu = [
+  { name: "Dziennik", href: "/dziennik", icon: Dumbbell },
+  { name: "Wykresy", href: "/wykresy", icon: LineChart },
+  { name: "O aplikacji", href: "/o-aplikacji", icon: Info },
+]
+
 export default function Sidebar() {
   const pathname = usePathname()
 
-  const menu = [
-    { name: "Dziennik", href: "/dziennik", icon: Dumbbell },
-    { name: "Wykresy", href: "/wykresy", icon: LineChart },
-    { name: "O aplikacji", href: "/o-aplikacji", icon: Info },
-  ]
 
   return (
     <aside className="sidebar">
